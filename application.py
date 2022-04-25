@@ -1,3 +1,4 @@
+import time
 import requests
 import os
 import json
@@ -48,10 +49,17 @@ def main(following, followers, tweet_Count):
         json_response = requests.get(
             profile_url, auth=bearer_oauth).json().get("data")
         id = json_response.get("id")
+        # get the following list of users id
+        following_url = "https://api.twitter.com/2/users/{}/following".format(id)
+        following_list = requests.get(
+            following_url,auth=bearer_oauth).json().get("data")
+        following_list = [i.get('id') for i in following_list]
+        print(following_list)
+        time.sleep(1)
 
     # get all the author_id from the json response
     # author_ids = [tweet.get("author_id") for tweet in json_response]
-        print(json.dumps(id, indent=4, sort_keys=True))
+    print(json.dumps(id, indent=4, sort_keys=True))
 
     # for author_id in author_ids:
     #     user_url = f"https://api.twitter.com/2/users/{author_id}?user.fields=public_metrics"
